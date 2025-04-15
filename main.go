@@ -10,18 +10,15 @@ import (
 func main() {
 	cfg, err := config.Read()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("error reading config: %v", err)
 	}
+	fmt.Printf("Read config: %+v\n", cfg)
 
 	err = cfg.SetUser("grayson")
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	updatedCfg, err := config.Read()
+	cfg, err = config.Read()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("error reading config: %v", err)
 	}
-
-	fmt.Printf("%v\n", *updatedCfg)
+	fmt.Printf("Read config again: %+v\n", cfg)
 }

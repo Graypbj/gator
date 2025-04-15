@@ -69,4 +69,3 @@ func write(cfg Config) error {
 
 	return nil
 }
-

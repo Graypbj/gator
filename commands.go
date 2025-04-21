@@ -1,6 +1,11 @@
 package main
 
-import "errors"
+import (
+	"context"
+	"errors"
+
+	"github.com/Graypbj/gator/internal/database"
+)
 
 // Command holds the name of the command and any number of args passed in
 type command struct {
@@ -25,4 +30,15 @@ func (c *commands) run(s *state, cmd command) error {
 		return errors.New("command not found")
 	}
 	return f(s, cmd)
+}
+
+func middlewareLoggedIn(handler func(s *state, cmd command, user database.User) error) func(*state, command) error {
+	return func(s *state, cmd command) error {
+		user, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
+		if err != nil {
+			return err
+		}
+
+		return handler(s, cmd, user)
+	}
 }

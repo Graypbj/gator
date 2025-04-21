@@ -10,17 +10,12 @@ import (
 )
 
 // AddFeed gets feed from http and adds it to the database
-func handlerAddFeed(s *state, cmd command) error {
+func handlerAddFeed(s *state, cmd command, user database.User) error {
 	if len(cmd.Args) < 2 {
 		return fmt.Errorf("not enough arguments given")
 	}
 	name := cmd.Args[0]
 	url := cmd.Args[1]
-
-	user, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("error getting current user: %w", err)
-	}
 
 	feed, err := s.db.CreateFeed(context.Background(), database.CreateFeedParams{
 		ID:        uuid.New(),
@@ -77,7 +72,7 @@ func handlerFeeds(s *state, cmd command) error {
 }
 
 // Follow adds a feed to a user
-func handlerFollow(s *state, cmd command) error {
+func handlerFollow(s *state, cmd command, user database.User) error {
 	if len(cmd.Args) < 1 {
 		return fmt.Errorf("no arguments given")
 	}
@@ -85,11 +80,6 @@ func handlerFollow(s *state, cmd command) error {
 	feed, err := s.db.GetFeedByURL(context.Background(), url)
 	if err != nil {
 		return fmt.Errorf("couldn't find feed with URL %s: %w", url, err)
-	}
-
-	user, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("couldn't get user: %w", err)
 	}
 
 	exists, err := s.db.CheckFeedFollowExists(context.Background(), database.CheckFeedFollowExistsParams{

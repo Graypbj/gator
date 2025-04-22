@@ -109,10 +109,3 @@ touch ~/.gatorconfig.json
 3. **Run Gator!**  
 Now you're ready to start using the CLI.
 
----
-
-## 📄 License
-
-MIT License
-```
-

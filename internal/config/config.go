@@ -15,7 +15,7 @@ type Config struct {
 
 func (cfg *Config) SetUser(userName string) error {
 	cfg.CurrentUserName = userName
-	return Write(*cfg)
+	return write(*cfg)
 }
 
 func Read() (Config, error) {
@@ -49,7 +49,7 @@ func getConfigFilePath() (string, error) {
 	return fullPath, nil
 }
 
-func Write(cfg Config) error {
+func write(cfg Config) error {
 	fullPath, err := getConfigFilePath()
 	if err != nil {
 		return err
@@ -69,3 +69,4 @@ func Write(cfg Config) error {
 
 	return nil
 }
+
